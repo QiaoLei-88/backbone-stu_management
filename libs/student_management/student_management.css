@@ -1,0 +1,19 @@
+body{
+	margin: 0;
+	padding: 0;
+}
+#header_container{
+	padding: 0% 8% ;
+}
+#body_container{
+	padding-top: 70px;
+	padding-left:8%;
+	padding-right:8%;
+}
+.filter-table .quick { margin-left: 0.5em; font-size: 0.8em; text-decoration: none; }
+.fitler-table .quick:hover { text-decoration: underline; }
+
+td.alt { background-color: #ffc; background-color: rgba(0, 255, 0, 0.2); }
+th[data-sort]{
+  cursor:pointer !important;
+}

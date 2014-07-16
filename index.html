@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>简易学生管理系统</title>
+	<link rel="stylesheet" href="libs/semantic_packaged/css/semantic.min.css">
+	<link rel="stylesheet" href="libs/datetimepicker/jquery.datetimepicker.css">
+	<link rel="stylesheet" href="libs/jQuery-Validation-Engine/css/validationEngine.jquery.css" type="text/css"/>
+	<link rel="stylesheet" href="libs/student_management/student_management.css">
+</head>
+<body>
+	
+	<header class='ui fixed teal transparent inverted main menu' >
+		<div id='header_container'>
+			<div class="left menu">
+				<a class="title item" href='#'> 
+					<b>简易学生管理系统</b>
+				</a>				
+			</div>
+
+			<div class="right menu">
+				<div class="title item">作者：李一非</div>
+				<div class="title item">QQ：279941191</div>
+			</div>
+		</div>
+	</header>
+
+	<section id='body_container'>
+
+		<h2 class="ui header">学生信息</h2>
+
+		<div class="ui left icon input small">
+		  <input type="text" placeholder="搜索学生..." id="input-filter">
+		  <i class="users icon"></i>
+        </div>	
+		<div class="ui green button tiny left add"><i class="add icon"></i>添加学生</div>
+		<table class="ui  table segment " id='stu_table'>
+			<thead>
+				<tr>
+					<th data-sort="string">学号</th>
+					<th data-sort="string">姓名</th>
+					<th data-sort="string">性别</th>
+					<th data-sort="string">入学时间</th>
+					<th data-sort="string">综合评分</th>
+					<th>操作</th>	
+				</tr>
+			</thead>
+			<script type='text/template' id='stu_tpl'>
+				<tbody>
+					<% for(var i=0,stu_len=student_list.length;i<stu_len;i++){ %>
+						<tr>
+							<% var stu = student_list.models[i].toJSON()%>
+							<td><%= stu.stu_id %></td>
+							<td><%= stu.name %></td>
+							<td><%= stu.sex %></td>
+							<td><%= stu.intended_time %></td>
+							<td>
+								<div class="ui star rating inactive">
+									<% for(var j=0,star_len=stu.score;j<star_len;j++){%> 
+										<i class="icon active"></i>
+									<%}%>
+									<% for(var k=stu.score;k<5;k++){ %> 
+										<i class="icon"></i>
+									<% } %>
+								</div>
+							</td>
+							<td>
+								<div class="tiny ui buttons">
+								  <div class="ui blue button update"><i class="edit icon"></i>更新</div>
+								  <div class="or"></div>
+								  <div class="ui red button delete"><i class="trash icon"></i>删除</div>
+		        				</div>
+							</td>
+						</tr>						
+					<% } %>
+				</tbody>
+			</script>
+			<tfoot></tfoot>
+		</table>
+
+	<div class="ui modal add"> <i class="close icon"></i>
+		<div class="header">添加新学生</div>
+		<div class="content">
+			<form class="ui form segment" id='addForm' method="post">
+				<div class="field ui small icon input">
+					<label>学号</label>
+					<input placeholder="学号" name="stu_id" type="text" class="validate[required,custom[stuId]] ajax[ajaxStuIDCall]" data-prompt-position="topLeft:50" ></div>
+				<div class="field ui small icon input">
+					<label>姓名</label>
+					<input placeholder="姓名" name="name" type="text" class="validate[required,custom[stuName]]" data-prompt-position="topLeft:50"></div>
+				<div class="field ui small icon input">
+					<label>性别</label>
+					<div class="ui dropdown selection">
+						<input type="hidden" name="sex" value='男'>	
+						<div class="default text">男</div> <i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item" data-value="男">男</div>
+							<div class="item" data-value="女">女</div>
+						</div>
+					</div>
+				</div>
+				<div class="field ui small icon input">
+					<label>入学时间</label>
+					<input type="text" name="intended_time" value='2012-09-01' class="datetimepicker validate[required,custom[date]],past[NOW]" data-prompt-position="topLeft:50"/>	
+				</div>
+				<div class="field ui small icon input">
+					<label>综合评分</label>
+					<div class="ui star rating active add">
+						<i class="icon"></i>
+						<i class="icon"></i>
+						<i class="icon"></i>
+						<i class="icon"></i>
+						<i class="icon"></i>
+					</div>
+				</div>
+				<div class="actions">
+					<div class="ui button black negative">取消</div>
+					<input class="ui button green " value='确认' type='submit'>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="ui modal update"> <i class="close icon"></i>
+		<div class="header">修改学生信息</div>
+		<div class="content">
+			<form class="ui form segment" id='updateForm' method="post">
+				<div class="field ui small icon input disabled">
+					<label>学号</label>
+					<input placeholder="学号" name="stu_id" type="text" disabled="disabled">
+				</div>
+				<div class="field ui small icon input">
+					<label>姓名</label>
+					<input placeholder="姓名" name="name" type="text" class="validate[required,custom[stuName]]" data-prompt-position="topLeft:50"></div>
+				<div class="field ui small icon input">
+					<label>性别</label>
+					<div class="ui dropdown selection">
+						<input type="hidden" name="sex" value='男'>	
+						<div class="default text">男</div> <i class="dropdown icon"></i>
+						<div class="menu">
+							<div class="item" data-value="男">男</div>
+							<div class="item" data-value="女">女</div>
+						</div>
+					</div>
+				</div>
+				<div class="field ui small icon input">
+					<label>入学时间</label>
+					<input type="text" name="intended_time" value='2012-09-01' class="datetimepicker validate[required,custom[date]],past[NOW]" data-prompt-position="topLeft:50"/>	
+				</div>
+				<div class="field ui small icon input">
+					<label>综合评分</label>
+					<div class="ui star rating active update">
+						<i class="icon"></i>
+						<i class="icon"></i>
+						<i class="icon"></i>
+						<i class="icon"></i>
+						<i class="icon"></i>
+					</div>
+				</div>
+				<div class="actions">
+					<div class="ui button black negative">取消</div>
+					<input class="ui button green " value='确认' type='submit'>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	</section>
+
+
+
+
+	<script src='libs/jquery/jquery-2.1.1.min.js'></script>
+	<script src='libs/semantic_packaged/javascript/semantic.min.js'></script>
+	<script src='libs/backbone/underscore.min.js'></script>
+	<script src='libs/backbone/backbone.min.js'></script>
+	<script src='libs/datetimepicker/jquery.datetimepicker.js'></script>
+	<script src="libs/jQuery-Validation-Engine/js/languages/jquery.validationEngine-zh_CN.js" type="text/javascript" charset="utf-8"></script>
+	<script src="libs/jQuery-Validation-Engine/js/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+	<script src="libs/filtertable/jquery.filtertable.min.js"></script>
+	<script src='libs/stupidtable/stupidtable.min.js'></script>
+	<script src='libs/student_management/student_management.js'></script>
+
+</body>
+</html>
