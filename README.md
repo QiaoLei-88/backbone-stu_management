@@ -3,7 +3,7 @@ backbone-stu_management
 
 #introduction:
 * add/delete/update/search student information
-* website:[简易学生管理系统](http://liyifei270.com/works/stu_management/)
+* website:[简易学生管理系统](http://liyifei270.com/blog/works/stu_management/)
 
 #requirement:
 * php
